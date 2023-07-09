@@ -8,9 +8,12 @@ const validationSchema = Yup.object({
   password: Yup.string()
     .required("Required")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number"
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
     ),
+  confirm_password: Yup.string()
+    .label("Confirm Password")
+    .equals([Yup.ref("password"), null], "Passwords must match"),
 });
 const initialValues = {};
 
@@ -35,7 +38,7 @@ const model = {
       required: true,
     },
     {
-      name: "confirm password",
+      name: "confirm_password",
       type: "password",
       label: "Confirm Password",
       placeholder: "Confirm your password",
