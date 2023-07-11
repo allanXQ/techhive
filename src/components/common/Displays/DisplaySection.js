@@ -10,19 +10,8 @@ import {
 import { useDispatch } from "react-redux";
 
 const DisplaySection = () => {
-  const dispatch = useDispatch();
   const products = useSelector(getAllProducts);
   const status = useSelector(getProductsStatus);
-  status === "succeeded" && console.log(products);
-
-  useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchProducts());
-    }
-  }, [status, dispatch]);
-
-  // if (status === "loading") return <div>Loading...</div>;
-  // if (status === "failed") return <div>Failed to load products</div>;
 
   return (
     <Grid
