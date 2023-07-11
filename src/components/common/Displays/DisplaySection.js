@@ -1,78 +1,38 @@
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import React from "react";
-
-const products = [
-  {
-    id: 1,
-    name: 'Asus ZenBook Pro Duo 15" OLED UX582 I9 32GB RAM 1TB SSD',
-    price: 1000,
-    formerPrice: 1200,
-    initialStock: 20,
-    remainingStock: 10,
-    image:
-      "https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/21/787548/1.jpg?1482",
-  },
-  {
-    id: 1,
-    name: "Samsung Galaxy S21",
-    price: 1000,
-    formerPrice: 1200,
-    initialStock: 20,
-    remainingStock: 10,
-    image:
-      "https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/21/787548/1.jpg?1482",
-  },
-  {
-    id: 1,
-    name: "Samsung Galaxy S21",
-    price: 1000,
-    formerPrice: 1200,
-    initialStock: 20,
-    remainingStock: 10,
-    image:
-      "https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/21/787548/1.jpg?1482",
-  },
-  {
-    id: 1,
-    name: "Samsung Galaxy S21",
-    price: 1000,
-    formerPrice: 1200,
-    initialStock: 20,
-    remainingStock: 10,
-    image:
-      "https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/21/787548/1.jpg?1482",
-  },
-  {
-    id: 1,
-    name: "Samsung Galaxy S21",
-    price: 1000,
-    formerPrice: 1200,
-    initialStock: 20,
-    remainingStock: 10,
-    image:
-      "https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/21/787548/1.jpg?1482",
-  },
-  {
-    id: 1,
-    name: "Samsung Galaxy S21",
-    price: 1000,
-    formerPrice: 1200,
-    initialStock: 20,
-    remainingStock: 10,
-    image:
-      "https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/21/787548/1.jpg?1482",
-  },
-];
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import {
+  fetchProducts,
+  getAllProducts,
+  getProductsStatus,
+} from "../../../Redux/Slices/products";
+import { useDispatch } from "react-redux";
 
 const DisplaySection = () => {
+  const dispatch = useDispatch();
+  const products = useSelector(getAllProducts);
+  const status = useSelector(getProductsStatus);
+  status === "succeeded" && console.log(products);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchProducts());
+    }
+  }, [status, dispatch]);
+
+  // if (status === "loading") return <div>Loading...</div>;
+  // if (status === "failed") return <div>Failed to load products</div>;
+
   return (
     <Grid
       container
       sx={(theme) => ({
-        width: "fit-content",
         alignItems: "center",
         width: "90vw",
+        [theme.breakpoints.down("lg")]: {
+          width: "100vw",
+        },
       })}
     >
       <Grid
@@ -83,7 +43,7 @@ const DisplaySection = () => {
           alignItems: "center",
           justifyContent: "space-between",
           height: "3rem",
-          bgcolor: theme.palette.primary.main,
+          px: theme.spacing(2),
         })}
       >
         <Typography variant="h6">Best Deals</Typography>
@@ -102,84 +62,97 @@ const DisplaySection = () => {
 
       <Grid
         item
-        xs={12}
         sx={(theme) => ({
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "center",
           alignItems: "center",
+          justifyContent: "center",
           gap: theme.spacing(0.5),
+          [theme.breakpoints.down("lg")]: {
+            alignItems: "flex-start",
+            gap: theme.spacing(1),
+          },
+          [theme.breakpoints.down("md")]: {
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+          },
+          [theme.breakpoints.down("sm")]: {},
         })}
       >
-        {products.map((product) => (
-          <Box
-            sx={(theme) => ({
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "fit-content",
-              maxWidth: 200,
-              bgcolor: "white",
-              pb: theme.spacing(1),
-              px: theme.spacing(1),
-            })}
-          >
-            <img
-              alt={product.name}
-              src={product.image}
-              key={product.id}
-              width={185}
-            />
+        {status === "succeeded" &&
+          products.map((product) => (
             <Box
+              key={product.id}
               sx={(theme) => ({
                 display: "flex",
                 flexDirection: "column",
-                alignSelf: "flex-start",
-                pt: theme.spacing(1),
-                gap: theme.spacing(1),
+                alignItems: "center",
+                width: "fit-content",
+                maxWidth: 200,
+                bgcolor: "white",
+                pb: theme.spacing(1),
+                px: theme.spacing(1),
+                //   [theme.breakpoints.down("lg")]: {
+                //     width: 400,
+                //   },
               })}
             >
-              <Typography
-                variant="productName"
+              <img
+                alt={product.name}
+                src={product.thumbnail}
+                key={product.id}
+                width={185}
+              />
+              <Box
                 sx={(theme) => ({
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  maxWidth: 160,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignSelf: "flex-start",
+                  pt: theme.spacing(1),
+                  gap: theme.spacing(1),
                 })}
               >
-                {product.name}
-              </Typography>
-              <Typography variant="productPrice">
-                Ksh {product.price.toLocaleString()}
-              </Typography>
-              {product.formerPrice && (
-                <Typography variant="formerPrice" component="s">
-                  Ksh {product.formerPrice.toLocaleString()}
-                </Typography>
-              )}
-              {product.remainingStock && (
-                <Typography variant="itemsLeft">
-                  {product.remainingStock} items left
-                </Typography>
-              )}
-              {product.remainingStock && (
-                <LinearProgress
-                  variant="determinate"
+                <Typography
+                  variant="productName"
                   sx={(theme) => ({
-                    height: "5px",
-                    width: "100%",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    maxWidth: 160,
                   })}
-                  value={
-                    ((product.initialStock - product.remainingStock) /
-                      product.initialStock) *
-                    100
-                  }
-                />
-              )}
+                >
+                  {product.name}
+                </Typography>
+                <Typography variant="productPrice">
+                  {/* Ksh {product.price.toLocaleString()} */}
+                </Typography>
+                {product.formerPrice && (
+                  <Typography variant="formerPrice" component="s">
+                    {/* Ksh {product.formerPrice.toLocaleString()} */}
+                  </Typography>
+                )}
+                {product.remainingStock && (
+                  <Typography variant="itemsLeft">
+                    {product.remainingStock} items left
+                  </Typography>
+                )}
+                {product.remainingStock && (
+                  <LinearProgress
+                    variant="determinate"
+                    sx={(theme) => ({
+                      height: "5px",
+                      width: "100%",
+                    })}
+                    value={
+                      ((product.initialStock - product.remainingStock) /
+                        product.initialStock) *
+                      100
+                    }
+                  />
+                )}
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))}
       </Grid>
     </Grid>
   );
