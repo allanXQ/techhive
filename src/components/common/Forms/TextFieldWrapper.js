@@ -17,7 +17,6 @@ const TextFieldWrapper = styled(TextField)((props, theme) => ({
   },
 }));
 const TextFieldComponent = ({ inputField, formikProps }) => {
-  console.log(formikProps.getFieldProps(inputField.name));
   return (
     <TextFieldWrapper
       {...inputField}

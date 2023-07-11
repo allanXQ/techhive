@@ -3,9 +3,7 @@ import TextFieldComponent from "../components/common/Forms/TextFieldWrapper";
 import { Button } from "@mui/material";
 
 const createForm = (model) => {
-  const submithandler = (values) => {
-    console.log(values);
-  };
+  const submithandler = (values) => {};
   return (
     <Formik
       initialValues={model.initialValues}

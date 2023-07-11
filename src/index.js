@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material";
+import { Provider } from "react-redux";
+import { store } from "./Redux/store";
 
 const theme = createTheme({
   palette: {
@@ -78,11 +80,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>
 );

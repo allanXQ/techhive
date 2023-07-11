@@ -2,6 +2,7 @@ import React from "react";
 import createForm from "../../utils/createForm";
 import { Box, Grid, Typography } from "@mui/material";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -59,8 +60,12 @@ const Signin = () => {
         <Typography variant="h4">{model.title}</Typography>
         <Box>{createForm(model)}</Box>
         <Box>
-          <Typography variant="body1">Forgot Password?</Typography>
-          <Typography variant="body1">Create Account</Typography>
+          <Typography variant="body1" component={Link} to="/forgotpassword">
+            Forgot Password?
+          </Typography>
+          <Typography variant="body1" component={Link} to="/signup">
+            Create Account
+          </Typography>
         </Box>
         <Typography>OR</Typography>
         <Box>
